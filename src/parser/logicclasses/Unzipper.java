@@ -1,5 +1,6 @@
 package parser.logicclasses;
 
+import org.springframework.stereotype.Component;
 import parser.Parser;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Component
 public class Unzipper {
 	
 	/**

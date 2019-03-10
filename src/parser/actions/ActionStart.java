@@ -29,9 +29,11 @@ public class ActionStart extends AbstractAction {
     private DefaultListModel<File> listModel;
     private Parser parser;
     private PropertiesHolder propertiesHolder;
+    private Unzipper unzipper;
 
     @Autowired
-    public ActionStart(Parser parser, PropertiesHolder propertiesHolder) {
+    public ActionStart(Parser parser, PropertiesHolder propertiesHolder, Unzipper unzipper) {
+        this.unzipper = unzipper;
         this.propertiesHolder = propertiesHolder;
         this.parser = parser;
         this.listModel = parser.getListModel();
@@ -55,10 +57,8 @@ public class ActionStart extends AbstractAction {
             try {
 
                 // obiekt unzippera do rozpakowania archiwów z plikami xml
-                Unzipper unzipper = new Unzipper();
                 unzipper.unzipList(listModel, folderXml);
 
-                System.out.println(propertiesHolder.getFileFirma());
                 SAXParser saxParser = saxParserFactory.newSAXParser();
 
                 // otwieram strumień zapisu dla firm
