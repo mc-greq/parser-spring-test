@@ -11,13 +11,11 @@ import java.io.File;
 @Component
 public class ActionDelete extends AbstractAction {
 
-    private JList<File> filesList;
-    private DefaultListModel<File> listModel;
+    private Parser parser;
 
     @Autowired
     public ActionDelete(Parser parser) {
-        this.filesList = parser.getFilesList();
-        this.listModel = parser.getListModel();
+        this.parser = parser;
         ActionEnum action = ActionEnum.DELETE;
         this.putValue(Action.NAME, action.toString());
         this.putValue(Action.SHORT_DESCRIPTION, action.getDesc());
@@ -27,9 +25,14 @@ public class ActionDelete extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int[] indices = filesList.getSelectedIndices();
+        int[] indices = parser.getFilesList().getSelectedIndices();
+        removeFromListModel(parser.getListModel(), indices);
+    }
+
+    public void removeFromListModel(DefaultListModel listModel, int... indices){
         for(int i = 0; i < indices.length; i++){
             listModel.remove(indices[i] - i);
         }
     }
+
 }

@@ -11,15 +11,11 @@ import java.io.File;
 @Component
 public class ActionAdd extends AbstractAction {
 
-    private JFileChooser fileChooser;
-    private DefaultListModel<File> listModel;
-    private JRootPane rootPane;
+    private Parser parser;
 
     @Autowired
     public ActionAdd(Parser parser) {
-        this.fileChooser = parser.getFileChooser();
-        this.listModel = parser.getListModel();
-        this.rootPane = parser.getRootPane();
+        this.parser = parser;
         ActionEnum action = ActionEnum.ADD;
         this.putValue(Action.NAME, action.toString());
         this.putValue(Action.SHORT_DESCRIPTION, action.getDesc());
@@ -30,20 +26,24 @@ public class ActionAdd extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        JFileChooser fileChooser = parser.getFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(Parser.jFileChooserFilter);
         fileChooser.setMultiSelectionEnabled(true);
 
-        int tmp = fileChooser.showDialog(rootPane, "Dodaj");
+        int tmp = fileChooser.showDialog(parser.getRootPane(), "Dodaj");
 
         if(tmp == JFileChooser.APPROVE_OPTION){
             File[] files = fileChooser.getSelectedFiles();
+            addFilesToListModel(files, parser.getListModel());
+        }
+    }
 
-            for(File file: files){
-                if(!listModel.contains(file)) {
-                    listModel.addElement(file);
-                }
+    public void addFilesToListModel(File[] files, DefaultListModel<File> listModel){
+        for(File file: files){
+            if(!listModel.contains(file)){
+                listModel.addElement(file);
             }
         }
     }
